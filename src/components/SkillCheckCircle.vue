@@ -1,34 +1,30 @@
 <script lang="ts" setup>
-import { computed, inject } from "vue";
+import { inject } from "vue";
 
-const props = defineProps(["modelValue"]);
-const emit = defineEmits(["update:modelValue"]);
+defineProps<{
+  verified: boolean;
+}>();
+
+const emit = defineEmits<{
+  (event: "clicked"): void;
+}>();
 
 const verifiedColor = inject<string | undefined>("verifiedColor");
-
-const value = computed({
-  get() {
-    return props.modelValue;
-  },
-  set(value) {
-    emit("update:modelValue", value);
-  },
-});
 </script>
 <template>
   <div
     :class="[
       'flex items-center justify-center',
-      value ? 'bg-verified' : 'border-gray-400 border-2',
+      verified ? 'bg-verified' : 'border-gray-400 border-2',
     ]"
     :style="[
-      value && verifiedColor ? { 'background-color': verifiedColor } : {},
+      verified && verifiedColor ? { 'background-color': verifiedColor } : {},
     ]"
     class="rounded-full w-10 aspect-square text-white p-1 transition-colors duration-300"
-    @click="value = !value"
+    @click="emit('clicked')"
   >
     <svg
-      v-if="value"
+      v-if="verified"
       class="m-2"
       fill="none"
       stroke="currentColor"

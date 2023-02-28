@@ -3,19 +3,16 @@ import App from "./App.vue";
 
 import CurrentTime from "./components/CurrentTime.ce.vue";
 import SDSkill from "./components/SDSkill.ce.vue";
-import SDSkillSet from "./components/SDSkillSet.ce.vue";
 import SDJobView from "./components/SDJobView.ce.vue";
 
 createApp(App).mount("#app");
 
 const CurrentTimeElement = defineCustomElement(CurrentTime);
 const SDSkillElement = defineCustomElement(SDSkill);
-const SDSkillSetElement = defineCustomElement(SDSkillSet);
 const SDJobViewElement = defineCustomElement(SDJobView);
 
 customElements.define("current-time", CurrentTimeElement);
 customElements.define("sd-skill", SDSkillElement);
-customElements.define("sd-skill-set", SDSkillSetElement);
 customElements.define("sd-job-view", SDJobViewElement);
 
-export { CurrentTimeElement, SDSkillElement, SDSkillSetElement, SDJobView };
+export { CurrentTimeElement, SDSkillElement, SDJobView };

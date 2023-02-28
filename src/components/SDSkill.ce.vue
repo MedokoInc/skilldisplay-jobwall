@@ -1,28 +1,28 @@
 <script lang="ts" setup>
 import SkillCheckCircle from "@/components/SkillCheckCircle.vue";
-import { inject, provide, ref } from "vue";
+import { inject, provide } from "vue";
 
 const props = defineProps<{
   verifiedColor?: string;
-  skill?: any;
+  skill: any;
 }>();
 
 provide("verifiedColor", props.verifiedColor || inject("verifiedColor"));
 
-const mockSkill = ref<any>({
-  name: "HTML & CSS Kenntnisse Das ist ein sehr langer Name den ich hier reinschreiben muss um zu sehen wie das aussehen wird",
-  level: 5,
-  link: "https://vuejs.org/",
-  verified: false,
-});
+const emit = defineEmits<{
+  (e: "toggleVerify", id: number): void;
+}>();
 </script>
 <template>
   <div class="flex items-center gap-4 justify-between">
     <div class="truncate">
-      <span class="text-lg font-bold">{{ skill?.name || mockSkill.name }}</span>
+      <span class="text-lg font-bold">{{ skill?.name }}</span>
     </div>
     <div>
-      <SkillCheckCircle v-model="mockSkill.verified" />
+      <SkillCheckCircle
+        :verified="skill?.verified"
+        @clicked="emit('toggleVerify', skill?.id)"
+      />
     </div>
   </div>
 </template>
