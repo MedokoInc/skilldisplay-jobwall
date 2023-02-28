@@ -1,14 +1,14 @@
 <script lang="ts" setup></script>
 
 <template>
-  <main>
+  <main class="flex flex-col items-center">
     <h1 class="text-4xl font-bold text-center">Component library test</h1>
-    <sd-skill
-      class="border-2 p-2 border-gray-500 rounded-xl"
-      verified-color="#9630ab"
-    />
-    <current-time />
+    <div class="max-w-[600px] w-full">
+      <sd-job-view></sd-job-view>
+    </div>
   </main>
 </template>
 
-<style scoped></style>
+<style scoped>
+@import url("style.css");
+</style>

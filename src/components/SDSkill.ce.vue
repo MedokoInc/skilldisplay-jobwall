@@ -4,6 +4,7 @@ import { inject, provide, ref } from "vue";
 
 const props = defineProps<{
   verifiedColor?: string;
+  skill?: any;
 }>();
 
 provide("verifiedColor", props.verifiedColor || inject("verifiedColor"));
@@ -18,7 +19,7 @@ const mockSkill = ref<any>({
 <template>
   <div class="flex items-center gap-4 justify-between">
     <div class="truncate">
-      <span class="text-lg font-bold">{{ mockSkill.name }}</span>
+      <span class="text-lg font-bold">{{ skill?.name || mockSkill.name }}</span>
     </div>
     <div>
       <SkillCheckCircle v-model="mockSkill.verified" />

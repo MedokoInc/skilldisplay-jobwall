@@ -4,7 +4,7 @@ import { computed, inject } from "vue";
 const props = defineProps(["modelValue"]);
 const emit = defineEmits(["update:modelValue"]);
 
-const verifiedColor = inject("verifiedColor");
+const verifiedColor = inject<string | undefined>("verifiedColor");
 
 const value = computed({
   get() {
@@ -19,15 +19,17 @@ const value = computed({
   <div
     :class="[
       'flex items-center justify-center',
-      value ? 'bg-green-500' : 'border-gray-400 border-2',
+      value ? 'bg-verified' : 'border-gray-400 border-2',
     ]"
-    :style="[value ? { 'background-color': verifiedColor } : {}]"
-    class="rounded-full w-10 aspect-square text-white"
+    :style="[
+      value && verifiedColor ? { 'background-color': verifiedColor } : {},
+    ]"
+    class="rounded-full w-10 aspect-square text-white p-1 transition-colors duration-300"
     @click="value = !value"
   >
     <svg
       v-if="value"
-      class="w-2 h-2"
+      class="m-2"
       fill="none"
       stroke="currentColor"
       stroke-linecap="round"
