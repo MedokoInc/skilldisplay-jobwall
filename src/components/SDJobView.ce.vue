@@ -1,22 +1,31 @@
 <script lang="ts" setup>
-import {computed, provide, ref} from "vue";
+import { computed, onMounted, provide, ref } from "vue";
 import Job from "@/utils/Job";
+import Skill from "@/utils/Skill";
 
 const props = defineProps<{
   verifiedColor?: string;
 }>();
 
-const mockJob = new Job(654);
-await mockJob.fetch();
-const skills = mockJob.skills;
-const job = mockJob.job;
+const mockJob = ref<Job>(new Job(654));
+const skills = ref<Skill[]>([]);
+const job = ref({});
 
+onMounted(async () => {
+  await mockJob.value.fetch();
+  skills.value = mockJob.value.skills;
+  job.value = mockJob;
 
-const totalSkills = computed(() => skills.length);
+  console.log(mockJob.value.brand);
+  console.log(mockJob.value.skills[0]);
+});
+
+const totalSkills = computed(() => skills.value.length);
 const totalVerified = computed(
-    () => skills.filter((s: any) => s.verified).length
+  () => skills.value.filter((s: any) => s.verified).length
 );
 
+const shaking = ref(false);
 const shakeAmountPx = computed(() => {
   return (totalVerified.value / totalSkills.value) * 100;
 });
@@ -44,9 +53,9 @@ provide("verifiedColor", props.verifiedColor);
     </div>
     <sd-skill
       v-for="skill in skills"
-      :key="skill.description"
-      :skill="skill"
+      :key="skill.skill.uid"
       :class="{ shake: shaking }"
+      :skill="skill"
     ></sd-skill>
   </div>
 </template>
@@ -60,45 +69,5 @@ div {
 
 :deep(h2) {
   @apply text-xl;
-}
-
-.shake {
-  animation: screen-shake 0.5s;
-}
-
-@keyframes screen-shake {
-  0% {
-    transform: translate(0);
-  }
-  10% {
-    transform: translate(v-bind('shakeAmountPx + "px"'), 0);
-  }
-  20% {
-    transform: translate(v-bind('-shakeAmountPx + "px"'), 0);
-  }
-  30% {
-    transform: translate(v-bind('shakeAmountPx + "px"'), 0);
-  }
-  40% {
-    transform: translate(v-bind('-shakeAmountPx + "px"'), 0);
-  }
-  50% {
-    transform: translate(v-bind('shakeAmountPx + "px"'), 0);
-  }
-  60% {
-    transform: translate(v-bind('-shakeAmountPx + "px"'), 0);
-  }
-  70% {
-    transform: translate(v-bind('shakeAmountPx + "px"'), 0);
-  }
-  80% {
-    transform: translate(v-bind('-shakeAmountPx + "px"'), 0);
-  }
-  90% {
-    transform: translate(v-bind('shakeAmountPx + "px"'), 0);
-  }
-  100% {
-    transform: translate(0);
-  }
 }
 </style>
