@@ -9,7 +9,7 @@ const emit = defineEmits<{
   (event: "clicked"): void;
 }>();
 
-const verifiedColor = inject<string | undefined>("verifiedColor");
+const verifiedColor = inject("verifiedColor", undefined);
 </script>
 <template>
   <div
