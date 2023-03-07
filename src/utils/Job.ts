@@ -48,7 +48,9 @@ export default class Job {
           this.job = data;
           this.brand = data.brand;
           for (const skill of data.skills) {
-            const skillObject = new Skill(skill.uid, skill.title, skill.progress);
+            const skillObject = new Skill(skill.uid);
+            skillObject.skill.progress = skill.progress;
+            skillObject.skill.title = skill.title;
             this.skills.push(skillObject);
           }
         } else this.couldNotReadJob();
