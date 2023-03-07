@@ -1,8 +1,6 @@
 export default class Skill {
-    constructor(skilluid, title, progress) {
+    constructor(skilluid) {
         this.skill.uid = skilluid;
-        this.skill.title = title;
-        this.skill.progress = progress;
     }
     skill = {
         uid: 0,
@@ -58,5 +56,11 @@ export default class Skill {
                 certification: 2,
             },
         };
+    }
+    setTitle(title) {
+        this.skill.title = title;
+    }
+    setProgress(progress) {
+        this.skill.progress = progress;
     }
 }

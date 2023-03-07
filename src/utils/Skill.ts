@@ -1,66 +1,70 @@
 export default class Skill {
-  constructor(skilluid: number, title: string, progress: any) {
-    this.skill.uid = skilluid;
-    this.skill.title = title;
-    this.skill.progress = progress;
-  }
-  skill = {
-    uid: 0,
-    title: "Loading...",
-    description: "Loading...",
-    goals: "Loading...",
-    tags: [],
-    progress: {
-      self: 2,
-      education: 2,
-      business: 2,
-      certification: 2,
-    },
-  };
+    constructor(skilluid: number) {
+        this.skill.uid = skilluid;
+    }
+    skill = {
+        uid: 0,
+        title: 'Loading...',
+        description: 'Loading...',
+        goals: 'Loading...',
+        tags: [],
+        progress: {
+            self: 2,
+            education: 2,
+            business: 2,
+            certification: 2
+        }
+    }
+    async fetch() {
+        await this.fetchSkillInfo();
+    }
 
-  isVerified() {
-    return this.skill.progress.self === 0;
-  }
+    private async fetchSkillInfo() {
 
-  async fetch() {
-    await this.fetchSkillInfo();
-  }
+        this.skill.description = 'Loading...';
+        this.skill.goals = 'Loading...';
 
-  private async fetchSkillInfo() {
-    this.skill.description = "Loading...";
-    this.skill.goals = "Loading...";
+        await fetch(`https://www.skilldisplay.eu/api/v1/skill/${this.skill.uid}`, {
+            method: 'GET',
+            credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data != null)
+                    this.skill = data;
+                else
+                    this.couldNotReadSkill();
+            })
+            .catch(() => {
+                this.couldNotReadSkill();
+            });
+    }
 
-    await fetch(`https://www.skilldisplay.eu/api/v1/skill/${this.skill.uid}`, {
-      method: "GET",
-      credentials: "same-origin",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data != null) this.skill = data;
-        else this.couldNotReadSkill();
-      })
-      .catch(() => {
-        this.couldNotReadSkill();
-      });
-  }
 
-  private couldNotReadSkill() {
-    this.skill = {
-      uid: 0,
-      title: "Skill data unavailable",
-      description:
-        "Please check if a skill with the given ID exists and if you have the permissions to read it.",
-      goals: "",
-      tags: [],
-      progress: {
-        self: 2,
-        education: 2,
-        business: 2,
-        certification: 2,
-      },
-    };
-  }
+    private couldNotReadSkill() {
+        this.skill = {
+            uid: 0,
+            title: 'Skill data unavailable',
+            description: 'Please check if a skill with the given ID exists and if you have the permissions to read it.',
+            goals: '',
+            tags: [],
+            progress: {
+                self: 2,
+                education: 2,
+                business: 2,
+                certification: 2
+            }
+        }
+    }
+
+    setTitle(title: string) {
+        this.skill.title = title;
+    }
+
+    setProgress(progress: any) {
+        this.skill.progress = progress;
+    }
 }
