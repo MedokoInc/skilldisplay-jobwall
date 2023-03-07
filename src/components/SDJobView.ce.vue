@@ -22,7 +22,7 @@ onMounted(async () => {
 
 const totalSkills = computed(() => skills.value.length);
 const totalVerified = computed(
-  () => skills.value.filter((s: Skill) => s.isVerified()).length
+  () => skills.value.filter((s) => s.isVerified()).length
 );
 
 const shaking = ref(false);
@@ -58,6 +58,7 @@ provide("verifiedColor", props.verifiedColor);
       :class="{ shake: shaking }"
       :skill="skill"
       @toggleVerify="toggleVerify"
+      :verifiedColor="verifiedColor"
     ></sd-skill>
   </div>
 </template>

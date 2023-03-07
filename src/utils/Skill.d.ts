@@ -13,7 +13,6 @@ export default class Skill {
             certification: number;
         };
     };
-    isVerified(): boolean;
     fetch(): Promise<void>;
     private fetchSkillInfo;
     private couldNotReadSkill;

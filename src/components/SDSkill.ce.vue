@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import SkillCheckCircle from "@/components/SkillCheckCircle.vue";
-import { inject, onMounted, provide, ref } from "vue";
+import { onMounted, ref } from "vue";
 import Skill from "@/utils/Skill";
 
 const props = defineProps<{
@@ -9,18 +9,13 @@ const props = defineProps<{
   uid?: number;
 }>();
 
-const skillRef = ref<Skill>(
-  props.skill || new Skill(props.uid || 0, "test", 0)
-);
+const skillRef = ref<Skill>(props.skill || new Skill(props.uid || 0));
 
 onMounted(async () => {
   if (!props.skill) {
     await skillRef.value.fetch();
   }
 });
-
-const verifiedColorRef = inject("verifiedColor", props.verifiedColor);
-provide("verifiedColor", verifiedColorRef);
 
 const emit = defineEmits<{
   (e: "toggleVerify", uid: number): void;
@@ -42,6 +37,7 @@ function toggleVerify() {
     <div>
       <SkillCheckCircle
         :verified="skillRef.isVerified()"
+        :verifiedColor="verifiedColor"
         @clicked="toggleVerify"
       />
     </div>
