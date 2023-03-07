@@ -1,5 +1,9 @@
 export default class Skill {
-    constructor(skilluid: number, title: string, progress: any);
+    constructor(uidOrData: number | {
+        uid: number;
+        title: string;
+        progress: any;
+    });
     skill: {
         uid: number;
         title: string;
@@ -16,4 +20,5 @@ export default class Skill {
     fetch(): Promise<void>;
     private fetchSkillInfo;
     private couldNotReadSkill;
+    verifySkill(): void;
 }

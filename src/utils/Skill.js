@@ -1,8 +1,13 @@
 export default class Skill {
-    constructor(skilluid, title, progress) {
-        this.skill.uid = skilluid;
-        this.skill.title = title;
-        this.skill.progress = progress;
+    constructor(uidOrData) {
+        if (typeof uidOrData === 'number') {
+            this.skill.uid = uidOrData;
+        }
+        else {
+            this.skill.uid = uidOrData.uid;
+            this.skill.title = uidOrData.title;
+            this.skill.progress = uidOrData.progress;
+        }
     }
     skill = {
         uid: 0,
@@ -55,5 +60,7 @@ export default class Skill {
                 certification: 2
             }
         };
+    }
+    verifySkill() {
     }
 }
