@@ -35,6 +35,7 @@ export default class Job {
             headers: {
                 Accept: "application/json",
                 "Access-Control-Allow-Origin": "*",
+                "x-api-key": "f9a0a381-5251-48f6-b93e-6193fbe10246",
             },
         })
             .then((response) => response.json())

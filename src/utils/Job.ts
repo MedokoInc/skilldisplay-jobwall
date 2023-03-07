@@ -40,6 +40,7 @@ export default class Job {
       headers: {
         Accept: "application/json",
         "Access-Control-Allow-Origin": "*",
+        "x-api-key": "f9a0a381-5251-48f6-b93e-6193fbe10246",
       },
     })
       .then((response) => response.json())
@@ -48,7 +49,11 @@ export default class Job {
           this.job = data;
           this.brand = data.brand;
           for (const skill of data.skills) {
-            const skillObject = new Skill(skill.uid, skill.title, skill.progress);
+            const skillObject = new Skill(
+              skill.uid,
+              skill.title,
+              skill.progress
+            );
             this.skills.push(skillObject);
           }
         } else this.couldNotReadJob();

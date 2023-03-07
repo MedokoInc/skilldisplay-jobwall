@@ -14,7 +14,7 @@ const job = ref({});
 onMounted(async () => {
   await mockJob.value.fetch();
   skills.value = mockJob.value.skills;
-  job.value = mockJob;
+  job.value = mockJob.value.job;
 
   console.log(mockJob.value.brand);
   console.log(mockJob.value.skills[0]);
@@ -22,7 +22,7 @@ onMounted(async () => {
 
 const totalSkills = computed(() => skills.value.length);
 const totalVerified = computed(
-  () => skills.value.filter((s: any) => s.verified).length
+  () => skills.value.filter((s: Skill) => s.isVerified()).length
 );
 
 const shaking = ref(false);
@@ -30,14 +30,15 @@ const shakeAmountPx = computed(() => {
   return (totalVerified.value / totalSkills.value) * 100;
 });
 
-/*function toggleVerify(customEvent: any) {
+function toggleVerify(customEvent: any) {
   const skillId = customEvent.detail[0];
-  console.log("toggleVerify", skillId);
   // find skill by id and toggle verified
-  const skill = skills.find((s: any) => s.id === skillId);
-  skill.skill.progress.self = skill.skill.progress.self%2 *2;
+  const skill = skills.value.find((s: any) => s.skill.uid === skillId);
+  if (!skill) return;
+
+  skill.skill.progress.self = skill.skill.progress.self === 0 ? 2 : 0;
   shaking.value = true;
-}*/
+}
 
 provide("verifiedColor", props.verifiedColor);
 </script>
@@ -56,6 +57,7 @@ provide("verifiedColor", props.verifiedColor);
       :key="skill.skill.uid"
       :class="{ shake: shaking }"
       :skill="skill"
+      @toggleVerify="toggleVerify"
     ></sd-skill>
   </div>
 </template>
