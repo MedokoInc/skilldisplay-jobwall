@@ -1,5 +1,5 @@
 export default class Skill {
-    constructor(skilluid: number);
+    constructor(skilluid: number, title: string, progress: any);
     skill: {
         uid: number;
         title: string;

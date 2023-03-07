@@ -1,6 +1,8 @@
 export default class Skill {
-    constructor(skilluid) {
+    constructor(skilluid, title, progress) {
         this.skill.uid = skilluid;
+        this.skill.title = title;
+        this.skill.progress = progress;
     }
     skill = {
         uid: 0,
