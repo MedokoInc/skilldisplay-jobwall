@@ -1,3 +1,7 @@
+:root {
+    --verified-color: #00ff00;
+}
+
 @keyframes check {
     0% {
         transform: scale(0.5);

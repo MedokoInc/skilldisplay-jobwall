@@ -1,10 +1,13 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+function myFunction() {
+  console.log("myFunction");
+}
+</script>
 
 <template>
   <main class="flex flex-col items-center">
     <div class="max-w-[600px] w-full">
-      <h1>Beispiel eines Jobangebots</h1>
-      <!--      <sd-job-view></sd-job-view>-->
+      <sd-job-view id="testJob" :onjobsubmit="myFunction()"></sd-job-view>
 
       <hr class="my-4" />
 

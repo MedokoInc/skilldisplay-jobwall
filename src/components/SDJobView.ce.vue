@@ -3,13 +3,13 @@ import { computed, onMounted, ref } from "vue";
 import Job from "@/utils/Job";
 import type Skill from "@/utils/Skill";
 
-defineProps<{
+const props = defineProps<{
   verifiedColor?: string;
 }>();
 
 const mockJob = ref<Job>(new Job(654));
 const skills = ref<Skill[]>([]);
-const job = ref<any>();
+const job = ref<any>({});
 
 onMounted(async () => {
   await mockJob.value.fetch();
@@ -36,9 +36,15 @@ function toggleVerify(customEvent: any) {
   skill.skill.progress.self = skill.skill.progress.self === 0 ? 2 : 0;
   shaking.value = true;
 }
+
+const emit = defineEmits(["jobSubmit"]);
+async function submit() {
+  console.log("submit");
+  emit("jobSubmit", skills.value);
+}
 </script>
 <template>
-  <div class="flex flex-col gap-4">
+  <form class="flex flex-col gap-4" @submit.prevent="submit">
     <h1 class="text-2xl font-bold">{{ job.name }}</h1>
     <div class="description" v-html="job.description"></div>
     <div class="flex gap-4">
@@ -47,6 +53,9 @@ function toggleVerify(customEvent: any) {
         Verified : {{ totalVerified }}
       </span>
     </div>
+    <button type="submit" class="bg-blue-500 rounded-lg text-white p-4">
+      Submit
+    </button>
     <sd-skill
       v-for="skill in skills"
       :key="skill.skill.uid"
@@ -55,7 +64,8 @@ function toggleVerify(customEvent: any) {
       @toggleVerify="toggleVerify"
       :verifiedColor="verifiedColor"
     ></sd-skill>
-  </div>
+    <hr />
+  </form>
 </template>
 
 <style scoped>
