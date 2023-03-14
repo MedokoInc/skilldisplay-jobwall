@@ -2,8 +2,8 @@ import { createApp, defineCustomElement } from "vue";
 import App from "./App.vue";
 
 import CurrentTime from "./components/CurrentTime.ce.vue";
-import SDSkill from "./components/SDSkill.ce.vue";
 import SDJobView from "./components/SDJobView.ce.vue";
+import SDSkill from "./components/SDSkill.ce.vue";
 
 createApp(App).mount("#app");
 

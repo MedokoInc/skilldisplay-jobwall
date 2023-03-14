@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import { inject } from "vue";
-
 defineProps<{
   verified: boolean;
   verifiedColor?: string;

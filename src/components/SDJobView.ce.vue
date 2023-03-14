@@ -1,15 +1,15 @@
 <script lang="ts" setup>
-import { computed, onMounted, provide, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import Job from "@/utils/Job";
-import Skill from "@/utils/Skill";
+import type Skill from "@/utils/Skill";
 
-const props = defineProps<{
+defineProps<{
   verifiedColor?: string;
 }>();
 
 const mockJob = ref<Job>(new Job(654));
 const skills = ref<Skill[]>([]);
-const job = ref({});
+const job = ref<any>();
 
 onMounted(async () => {
   await mockJob.value.fetch();
@@ -26,9 +26,6 @@ const totalVerified = computed(
 );
 
 const shaking = ref(false);
-const shakeAmountPx = computed(() => {
-  return (totalVerified.value / totalSkills.value) * 100;
-});
 
 function toggleVerify(customEvent: any) {
   const skillId = customEvent.detail[0];
@@ -39,8 +36,6 @@ function toggleVerify(customEvent: any) {
   skill.skill.progress.self = skill.skill.progress.self === 0 ? 2 : 0;
   shaking.value = true;
 }
-
-provide("verifiedColor", props.verifiedColor);
 </script>
 <template>
   <div class="flex flex-col gap-4">

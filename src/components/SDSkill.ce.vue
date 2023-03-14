@@ -7,6 +7,7 @@ const props = defineProps<{
   verifiedColor?: string;
   skill?: Skill;
   uid?: number;
+  externalCssUrl?: string;
 }>();
 
 const skillRef = ref<Skill>(props.skill || new Skill(props.uid || 0));
@@ -17,10 +18,7 @@ onMounted(async () => {
   }
 });
 
-const emit = defineEmits<{
-  (e: "toggleVerify", uid: number): void;
-}>();
-
+const emit = defineEmits(["toggleVerify"]);
 function toggleVerify() {
   if (!props.skill) {
     skillRef.value.skill.progress.self =
@@ -31,14 +29,18 @@ function toggleVerify() {
 </script>
 <template>
   <div class="flex items-center gap-4 justify-between">
+    <link rel="stylesheet" :href="externalCssUrl" />
     <div class="truncate">
-      <span class="text-lg font-bold">{{ skillRef.skill.title }}</span>
+      <span class="text-lg font-bold test">{{ skillRef.skill.title }}</span>
+      {{ verifiedColor }}
+      {{ externalCssUrl }}
     </div>
     <div>
       <SkillCheckCircle
         :verified="skillRef.isVerified()"
         :verifiedColor="verifiedColor"
         @clicked="toggleVerify"
+        :class="{ 'animation-check': skillRef.isVerified() }"
       />
     </div>
   </div>
