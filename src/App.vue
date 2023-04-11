@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import ProgressBar from "@/components/ProgressBar.ce.vue";
+
 function myFunction() {
   console.log("myFunction");
 }
@@ -7,7 +9,12 @@ function myFunction() {
 <template>
   <main class="flex flex-col items-center">
     <div class="max-w-[600px] w-full">
-      <sd-job-view id="testJob" :onjobsubmit="myFunction()"></sd-job-view>
+      <ProgressBar progress="50" />
+      <sd-job-view
+        id="testJob"
+        external-css-url="ext.css"
+        @jobSubmit="myFunction"
+      ></sd-job-view>
 
       <hr class="my-4" />
 

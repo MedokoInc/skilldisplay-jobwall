@@ -28,12 +28,14 @@ function toggleVerify() {
 }
 </script>
 <template>
-  <div class="flex items-center gap-4 justify-between">
+  <div
+    class="flex items-center gap-4 justify-between sd-skill transition-all duration-500 bg-white"
+    :class="{ 'sd-skill-verified': skillRef.isVerified() }"
+  >
     <link rel="stylesheet" :href="externalCssUrl" />
     <div class="truncate">
       <span class="text-lg font-bold test">{{ skillRef.skill.title }}</span>
       {{ verifiedColor }}
-      {{ externalCssUrl }}
     </div>
     <div>
       <SkillCheckCircle
