@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { computed, onMounted, ref } from "vue";
+import gsap from "gsap";
 import Job from "@/utils/Job";
 import type Skill from "@/utils/Skill";
 import ProgressBar from "@/components/ProgressBar.ce.vue";
@@ -7,19 +8,18 @@ import ProgressBar from "@/components/ProgressBar.ce.vue";
 defineProps<{
   verifiedColor?: string;
   externalCssUrl?: string;
+  uid?: number;
 }>();
 
-const mockJob = ref<Job>(new Job(654));
+const job = ref<Job>(new Job(654));
 const skills = ref<Skill[]>([]);
-let job = ref<Job>({});
 
 onMounted(async () => {
-  await mockJob.value.fetch();
-  skills.value = mockJob.value.skills;
-  job = mockJob;
+  await job.value.fetch();
+  skills.value = job.value.skills;
 
-  console.log(mockJob.value.brand);
-  console.log(mockJob.value.skills[0]);
+  console.log(job.value.brand);
+  console.log(job.value.skills[0]);
 });
 
 const totalSkills = computed(() => skills.value.length);
@@ -50,8 +50,8 @@ async function submit() {
 const orderedSkills = computed(() => {
   const skillCopy = [...skills.value];
   return skillCopy.sort((a, b) => {
-    if (a.skill.uid < b.skill.uid) return -1;
-    if (a.skill.uid > b.skill.uid) return 1;
+    if (a.uid < b.uid) return -1;
+    if (a.uid > b.uid) return 1;
     return 0;
   });
 });
@@ -138,12 +138,12 @@ function onSkillLeave(el: any, done: any) {
         @leave="onSkillLeave"
         @before-leave="beforeSkillLeave"
       >
-        <div v-for="skill in unverifiedSkills" :key="skill.skill.uid">
+        <div v-for="skill in unverifiedSkills" :key="skill.uid">
           <sd-skill
-            class="w-full"
             :external-css-url="externalCssUrl"
             :skill="skill"
             :verifiedColor="verifiedColor"
+            class="w-full"
             @toggleVerify="toggleVerify"
           />
         </div>
