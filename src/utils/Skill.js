@@ -1,30 +1,36 @@
 export default class Skill {
     constructor(skilluid) {
-        this.skill.uid = skilluid;
+        this.uid = skilluid;
     }
-    skill = {
+    uid;
+    title = "Loading...";
+    description = "Loading...";
+    goals = "Loading...";
+    owner = {
         uid: 0,
-        title: "Loading...",
-        description: "Loading...",
-        goals: "Loading...",
-        tags: [],
-        progress: {
-            self: 2,
-            education: 2,
-            business: 2,
-            certification: 2,
-        },
+        firstName: "Loading...",
+        lastName: "Loading...",
+        userAvatar: "Loading...",
     };
+    tags = [];
+    links = [];
+    progress = {
+        self: 2,
+        education: 2,
+        business: 2,
+        certification: 2,
+    };
+    pending = false;
     isVerified() {
-        return this.skill.progress.self === 0;
+        return this.progress.self == 1;
     }
     async fetch() {
         await this.fetchSkillInfo();
     }
     async fetchSkillInfo() {
-        this.skill.description = "Loading...";
-        this.skill.goals = "Loading...";
-        await fetch(`https://www.skilldisplay.eu/api/v1/skill/${this.skill.uid}`, {
+        this.description = "Loading...";
+        this.goals = "Loading...";
+        await fetch(`https://www.skilldisplay.eu/api/v1/skill/${this.uid}`, {
             method: "GET",
             credentials: "same-origin",
             headers: {
@@ -33,8 +39,15 @@ export default class Skill {
         })
             .then((response) => response.json())
             .then((data) => {
-            if (data != null)
-                this.skill = data;
+            if (data != null) {
+                this.title = data.title;
+                this.description = data.description;
+                this.goals = data.goals;
+                this.owner = data.owner;
+                this.tags = data.tags;
+                this.links = data.links;
+                this.progress = data.progress;
+            }
             else
                 this.couldNotReadSkill();
         })
@@ -43,24 +56,29 @@ export default class Skill {
         });
     }
     couldNotReadSkill() {
-        this.skill = {
+        this.title = "Skill data unavailable";
+        this.description =
+            "Please check if a skill with the given ID exists and if you have the permissions to read it.";
+        this.goals = "";
+        this.owner = {
             uid: 0,
-            title: "Skill data unavailable",
-            description: "Please check if a skill with the given ID exists and if you have the permissions to read it.",
-            goals: "",
-            tags: [],
-            progress: {
-                self: 2,
-                education: 2,
-                business: 2,
-                certification: 2,
-            },
+            firstName: "Loading...",
+            lastName: "Loading...",
+            userAvatar: "Loading...",
+        };
+        this.tags = [];
+        this.links = [];
+        this.progress = {
+            self: 2,
+            education: 2,
+            business: 2,
+            certification: 2,
         };
     }
     setTitle(title) {
-        this.skill.title = title;
+        this.title = title;
     }
     setProgress(progress) {
-        this.skill.progress = progress;
+        this.progress = progress;
     }
 }

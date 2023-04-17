@@ -11,12 +11,12 @@ defineProps<{
 
 const mockJob = ref<Job>(new Job(654));
 const skills = ref<Skill[]>([]);
-const job = ref<any>({});
+let job = ref<Job>({});
 
 onMounted(async () => {
   await mockJob.value.fetch();
   skills.value = mockJob.value.skills;
-  job.value = mockJob.value.job;
+  job = mockJob;
 
   console.log(mockJob.value.brand);
   console.log(mockJob.value.skills[0]);
@@ -36,10 +36,10 @@ const shaking = ref(false);
 function toggleVerify(customEvent: any) {
   const skillId = customEvent.detail[0];
   // find skill by id and toggle verified
-  const skill = skills.value.find((s: any) => s.skill.uid === skillId);
+  const skill = skills.value.find((s: any) => s.uid === skillId);
   if (!skill) return;
 
-  skill.skill.progress.self = skill.skill.progress.self === 0 ? 2 : 0;
+  skill.progress.self = skill.progress.self === 0 ? 2 : 0;
   shaking.value = true;
 }
 
@@ -80,7 +80,7 @@ async function submit() {
     <div class="flex-1 overflow-y-auto flex flex-col gap-y-2 p-1">
       <sd-skill
         v-for="skill in skills"
-        :key="skill.skill.uid"
+        :key="skill.uid"
         :class="{ shake: shaking }"
         :skill="skill"
         @toggleVerify="toggleVerify"

@@ -1,18 +1,19 @@
 export default class Skill {
     constructor(skilluid: number);
-    skill: {
-        uid: number;
-        title: string;
-        description: string;
-        goals: string;
-        tags: never[];
-        progress: {
-            self: number;
-            education: number;
-            business: number;
-            certification: number;
-        };
+    uid: number;
+    title: String;
+    description: String;
+    goals: String;
+    owner: Object;
+    tags: Array<any>;
+    links: Array<any>;
+    progress: {
+        self: number;
+        education: number;
+        business: number;
+        certification: number;
     };
+    pending: boolean;
     isVerified(): boolean;
     fetch(): Promise<void>;
     private fetchSkillInfo;

@@ -3,34 +3,36 @@ import Brand from "./Brand";
 
 export default class Job {
   constructor(jobuid: number) {
-    this.job.uid = jobuid;
+    this.uid = jobuid;
   }
 
-  job = {
-    uid: 0,
-    name: "Loading...",
-    description: "Loading...",
-    certificate: "Loading...",
-    firstCategoryTitle: "Loading...",
-    mediaPublicUrl: "Loading...",
-    progress: {
-      self: 2,
-      education: 2,
-      business: 2,
-      certification: 2,
-    },
-    links: [],
+  uid: number;
+  name: String = "Loading...";
+  description: String = "Loading...";
+  certificate: boolean = false;
+  firstCategoryTitle: String = "Loading...";
+  mediaPublicUrl: String = "Loading...";
+  progress: Object = {
+    self: 2,
+    education: 2,
+    business: 2,
+    certification: 2,
   };
+  links: Array<any> = [];
+  recommendedSkillSets: Array<any> = [];
+  recommendedSkills: Array<any> = [];
+  skillCount: number = 0;
+
   brand = Brand;
   skills: Skill[] = [];
 
   async fetch() {
-    await this.fetchJobInfo(this.job.uid);
+    await this.fetchJobInfo(this.uid);
   }
 
   private async fetchJobInfo(jobuid: number) {
-    this.job.description = "Loading...";
-    this.job.certificate = "Loading...";
+    this.description = "Loading...";
+    this.certificate = false;
 
     const url = "https://www.skilldisplay.eu/api/v1/skillset/" + jobuid;
     await fetch(url, {
@@ -45,12 +47,22 @@ export default class Job {
       .then((response) => response.json())
       .then((data) => {
         if (data != null) {
-          this.job = data;
+          this.name = data.name;
+          this.description = data.description;
+          this.certificate = data.certificate;
+          this.firstCategoryTitle = data.firstCategoryTitle;
+          this.mediaPublicUrl = data.mediaPublicUrl;
+          this.progress = data.progress;
+          this.links = data.links;
+          this.recommendedSkillSets = data.recommendedSkillSets;
+          this.recommendedSkills = data.recommendedSkills;
+          this.skillCount = data.skillCount;
+
           this.brand = data.brand;
           for (const skill of data.skills) {
             const skillObject = new Skill(skill.uid);
-            skillObject.skill.progress = skill.progress;
-            skillObject.skill.title = skill.title;
+            skillObject.progress = skill.progress;
+            skillObject.title = skill.title;
             this.skills.push(skillObject);
           }
         } else this.couldNotReadJob();
@@ -60,22 +72,5 @@ export default class Job {
       });
   }
 
-  private couldNotReadJob() {
-    this.job = {
-      uid: 0,
-      name: "Job data unavailable",
-      description:
-        "Please check if a job with the given ID exists and if you have the permissions to read it.",
-      certificate: "",
-      firstCategoryTitle: "",
-      mediaPublicUrl: "",
-      progress: {
-        self: 2,
-        education: 2,
-        business: 2,
-        certification: 2,
-      },
-      links: [],
-    };
-  }
+  private couldNotReadJob() {}
 }
