@@ -3,7 +3,6 @@ import { computed, onMounted, ref } from "vue";
 import Job from "@/utils/Job";
 import type Skill from "@/utils/Skill";
 import ProgressBar from "@/components/ProgressBar.ce.vue";
-import gsap from "gsap";
 
 defineProps<{
   verifiedColor?: string;
@@ -12,12 +11,12 @@ defineProps<{
 
 const mockJob = ref<Job>(new Job(654));
 const skills = ref<Skill[]>([]);
-const job = ref<any>({});
+let job = ref<Job>({});
 
 onMounted(async () => {
   await mockJob.value.fetch();
   skills.value = mockJob.value.skills;
-  job.value = mockJob.value.job;
+  job = mockJob;
 
   console.log(mockJob.value.brand);
   console.log(mockJob.value.skills[0]);
@@ -35,10 +34,10 @@ const progress = computed(
 function toggleVerify(customEvent: any) {
   const skillId = customEvent.detail[0];
   // find skill by id and toggle verified
-  const skill = skills.value.find((s: any) => s.skill.uid === skillId);
+  const skill = skills.value.find((s: any) => s.uid === skillId);
   if (!skill) return;
 
-  skill.skill.progress.self = skill.skill.progress.self === 0 ? 2 : 0;
+  skill.progress.self = skill.progress.self === 0 ? 2 : 0;
 }
 
 const emit = defineEmits(["jobSubmit"]);

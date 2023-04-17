@@ -7,20 +7,18 @@ export default class Brand {
     uid: number,
     url: string
   ) {
-    this.brand.firstCategoryTitle = firstCategoryTitle;
-    this.brand.logoPublicUrl = logoPublicUrl;
-    this.brand.memberCount = memberCount;
-    this.brand.name = name;
-    this.brand.uid = uid;
-    this.brand.url = url;
+    this.firstCategoryTitle = firstCategoryTitle;
+    this.logoPublicUrl = logoPublicUrl;
+    this.memberCount = memberCount;
+    this.name = name;
+    this.uid = uid;
+    this.url = url;
   }
 
-  brand = {
-    uid: 0,
-    url: "Loading...",
-    name: "Loading...",
-    logoPublicUrl: "Loading...",
-    memberCount: 0,
-    firstCategoryTitle: "Loading...",
-  };
+  uid: number = 0;
+  url: String = "Loading...";
+  name: String = "Loading...";
+  logoPublicUrl: String = "Loading...";
+  memberCount: number = 0;
+  firstCategoryTitle: String = "Loading...";
 }

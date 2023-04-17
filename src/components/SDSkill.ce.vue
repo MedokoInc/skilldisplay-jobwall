@@ -21,10 +21,10 @@ onMounted(async () => {
 const emit = defineEmits(["toggleVerify"]);
 function toggleVerify() {
   if (!props.skill) {
-    skillRef.value.skill.progress.self =
-      skillRef.value.skill.progress.self === 0 ? 2 : 0;
+    skillRef.value.progress.self =
+      skillRef.value.progress.self === 0 ? 2 : 0;
   }
-  emit("toggleVerify", skillRef.value.skill.uid);
+  emit("toggleVerify", skillRef.value.uid);
 }
 </script>
 <template>
@@ -34,7 +34,7 @@ function toggleVerify() {
   >
     <link rel="stylesheet" :href="externalCssUrl" />
     <div class="truncate">
-      <span class="text-lg font-bold test">{{ skillRef.skill.title }}</span>
+      <span class="text-lg font-bold test">{{ skillRef.title }}</span>
       {{ verifiedColor }}
     </div>
     <div>
