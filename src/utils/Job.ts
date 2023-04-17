@@ -1,5 +1,6 @@
 import Skill from "./Skill";
 import Brand from "./Brand";
+import CryptoJS from "crypto-js";
 
 export default class Job {
   constructor(jobuid: number) {
@@ -70,6 +71,51 @@ export default class Job {
       .catch(() => {
         this.couldNotReadJob();
       });
+  }
+
+  private verifyCheckedSkills(email: string, apiKey: string) {
+    for (const skill of this.skills) {
+      if (skill.progress.self == 0) {
+        this.verifySkill(skill, email, apiKey);
+      }
+    }
+  }
+
+  private verifySkill(skill: Skill, email: string, apiKey: string) {
+    skill.pending = true;
+    if (email != "") {
+      const payload = {
+        SkillId: skill.uid,
+        Level: "self",
+        VerifierId: 0,
+        CampaignId: 0,
+        Username: email,
+        AutoConfirm: true,
+        Signature: "",
+      };
+
+      payload.Signature = CryptoJS.SHA256(
+        JSON.stringify(payload) + "sdself"
+      ).toString();
+
+      fetch("https://www.skilldisplay.eu/api/v1/verification/confirm", {
+        method: "POST",
+        credentials: "same-origin",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": apiKey,
+        },
+        body: JSON.stringify(payload),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            skill.pending = false;
+            skill.progress.self = 0;
+            skill.fetch();
+          }
+        });
+    }
   }
 
   private couldNotReadJob() {}
