@@ -9,12 +9,13 @@ function myFunction() {
 <template>
   <main class="flex flex-col items-center">
     <div class="max-w-[800px] w-full">
-      <ProgressBar progress="50" />
+      <ProgressBar :progress="50" />
       <div class="h-[800px]">
         <sd-job-view
           id="testJob"
-          class="h-full bg-red-500/30"
+          class="h-full"
           external-css-url="ext.css"
+          uid="654"
           @jobSubmit="myFunction"
         ></sd-job-view>
       </div>

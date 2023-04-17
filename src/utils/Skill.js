@@ -22,7 +22,7 @@ export default class Skill {
     };
     pending = false;
     isVerified() {
-        return this.progress.self == 1;
+        return this.progress.self === 0;
     }
     async fetch() {
         await this.fetchSkillInfo();
