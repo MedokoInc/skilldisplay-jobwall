@@ -5,21 +5,18 @@ import Job from "@/utils/Job";
 import type Skill from "@/utils/Skill";
 import ProgressBar from "@/components/ProgressBar.ce.vue";
 
-defineProps<{
+const props = defineProps<{
   verifiedColor?: string;
   externalCssUrl?: string;
   uid?: number;
 }>();
 
-const job = ref<Job>(new Job(654));
+const job = ref<Job>(new Job(props.uid || 0));
 const skills = ref<Skill[]>([]);
 
 onMounted(async () => {
   await job.value.fetch();
   skills.value = job.value.skills;
-
-  console.log(job.value.brand);
-  console.log(job.value.skills[0]);
 });
 
 const totalSkills = computed(() => skills.value.length);
@@ -27,16 +24,18 @@ const totalVerified = computed(
   () => skills.value.filter((s) => s.isVerified()).length
 );
 
-const progress = computed(
-  () => (totalVerified.value / totalSkills.value) * 100
+const progress = computed(() =>
+  totalSkills.value === 0 ? 0 : (totalVerified.value / totalSkills.value) * 100
 );
 
 function toggleVerify(customEvent: any) {
   const skillId = customEvent.detail[0];
+  console.log(skillId);
   // find skill by id and toggle verified
   const skill = skills.value.find((s: any) => s.uid === skillId);
   if (!skill) return;
 
+  console.log(skill);
   skill.progress.self = skill.progress.self === 0 ? 2 : 0;
 }
 
@@ -98,6 +97,9 @@ function onSkillLeave(el: any, done: any) {
     },
   });
 }
+
+const showAuthenticateDialog = ref(false);
+const apiKey = ref("");
 </script>
 <template>
   <link :href="externalCssUrl" rel="stylesheet" />
@@ -106,8 +108,51 @@ function onSkillLeave(el: any, done: any) {
     v-bind="$attrs"
     @submit.prevent="submit"
   >
+    <dialog
+      :open="showAuthenticateDialog"
+      @close="showAuthenticateDialog = false"
+      class="shadow-lg rounded-md p-4 bg-white mt-4 p-2"
+    >
+      <span
+        >Authenticate your SkillDisplay account by entering your API-Key
+        below.</span
+      >
+      <label class="text-sm text-gray-700 block mt-2" for="key">API-Key</label>
+      <input
+        type="text"
+        class="border border-gray-300 rounded-md p-2 w-full"
+        id="key"
+        v-model="apiKey"
+      />
+      <div class="flex gap-4 mt-4">
+        <button
+          type="button"
+          class="text-blue-500 underline font-bold"
+          @click="showAuthenticateDialog = false"
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          class="text-blue-500 underline font-bold"
+          @click="showAuthenticateDialog = false"
+        >
+          Authenticate
+        </button>
+      </div>
+    </dialog>
+
     <div class="flex flex-col gap-y-4 px-12">
-      <h1 class="text-2xl font-bold">{{ job.name }}</h1>
+      <div class="flex justify-between">
+        <h1 class="text-2xl font-bold">{{ job.name }}</h1>
+        <button
+          type="button"
+          class="text-blue-500 underline"
+          @click="showAuthenticateDialog = true"
+        >
+          Authenticate
+        </button>
+      </div>
       <div class="description" v-html="job.description"></div>
       <div class="flex gap-4">
         <span class="text-sm font-bold">Total : {{ totalSkills }}</span>
@@ -123,13 +168,13 @@ function onSkillLeave(el: any, done: any) {
           { 'sd-submit-progress-80': progress >= 80 },
           { 'sd-submit-progress-100': progress >= 100 },
         ]"
-        class="sd-submit sticky bottom-0"
+        class="sd-submit bottom-0"
         type="submit"
       >
         Submit
       </button>
     </div>
-    <div class="flex-1 flex flex-col gap-y-2 overflow-y-auto">
+    <div class="flex-1 flex flex-col gap-y-2 overflow-y-auto py-2">
       <TransitionGroup
         appear
         class="sd-skills flex flex-col gap-y-2 px-12"
@@ -154,7 +199,7 @@ function onSkillLeave(el: any, done: any) {
         name="verified"
         tag="div"
       >
-        <div v-for="skill in verifiedSkills" :key="skill.skill.uid">
+        <div v-for="skill in verifiedSkills" :key="skill.uid">
           <sd-skill
             :external-css-url="externalCssUrl"
             :skill="skill"

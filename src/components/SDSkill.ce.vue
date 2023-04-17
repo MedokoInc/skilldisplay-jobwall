@@ -21,8 +21,7 @@ onMounted(async () => {
 const emit = defineEmits(["toggleVerify"]);
 function toggleVerify() {
   if (!props.skill) {
-    skillRef.value.progress.self =
-      skillRef.value.progress.self === 0 ? 2 : 0;
+    skillRef.value.progress.self = skillRef.value.progress.self === 0 ? 2 : 0;
   }
   emit("toggleVerify", skillRef.value.uid);
 }

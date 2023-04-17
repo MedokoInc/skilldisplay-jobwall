@@ -1,4 +1,3 @@
-import CryptoJS from "crypto-js";
 export default class User {
     constructor(email) {
         this.mail = email;

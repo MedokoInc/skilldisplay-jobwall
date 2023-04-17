@@ -1,5 +1,4 @@
 import type Skill from "./Skill";
-import CryptoJS from "crypto-js";
 
 export default class User {
   constructor(email: string) {
