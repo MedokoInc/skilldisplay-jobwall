@@ -8,10 +8,14 @@ export default class Jobs {
   jobs: Job[];
 
   async fetch() {
-    await this.fetchJobs();
+    await this.fetchJobs("");
   }
 
-  private async fetchJobs() {
+  async fetchWithKey(key: string) {
+    await this.fetchJobs(key);
+  }
+
+  private async fetchJobs(apiKey: string) {
     const url = "https://www.skilldisplay.eu/api/v1/skillsets";
     await fetch(url, {
       method: "GET",
@@ -20,6 +24,7 @@ export default class Jobs {
       headers: {
         Accept: "application/json",
         "Access-Control-Allow-Origin": "*",
+        "x-api-key": apiKey,
       },
     })
       .then((response) => response.json())

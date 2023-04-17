@@ -24,9 +24,12 @@ export default class Job {
     brand = Brand;
     skills = [];
     async fetch() {
-        await this.fetchJobInfo(this.uid);
+        await this.fetchJobInfo(this.uid, "");
     }
-    async fetchJobInfo(jobuid) {
+    async fetchWithKey(key) {
+        await this.fetchJobInfo(this.uid, key);
+    }
+    async fetchJobInfo(jobuid, apiKey) {
         this.description = "Loading...";
         this.certificate = false;
         const url = "https://www.skilldisplay.eu/api/v1/skillset/" + jobuid;
@@ -37,6 +40,7 @@ export default class Job {
             headers: {
                 Accept: "application/json",
                 "Access-Control-Allow-Origin": "*",
+                "x-api-key": apiKey,
             },
         })
             .then((response) => response.json())

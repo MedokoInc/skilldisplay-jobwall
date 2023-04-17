@@ -25,9 +25,12 @@ export default class Skill {
         return this.progress.self === 0;
     }
     async fetch() {
-        await this.fetchSkillInfo();
+        await this.fetchSkillInfo("");
     }
-    async fetchSkillInfo() {
+    async fetchWithKey(key) {
+        await this.fetchSkillInfo(key);
+    }
+    async fetchSkillInfo(apiKey) {
         this.description = "Loading...";
         this.goals = "Loading...";
         await fetch(`https://www.skilldisplay.eu/api/v1/skill/${this.uid}`, {
@@ -35,6 +38,7 @@ export default class Skill {
             credentials: "same-origin",
             headers: {
                 "Content-Type": "application/json",
+                "x-api-key": apiKey,
             },
         })
             .then((response) => response.json())

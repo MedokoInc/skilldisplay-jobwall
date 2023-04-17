@@ -28,10 +28,14 @@ export default class Job {
   skills: Skill[] = [];
 
   async fetch() {
-    await this.fetchJobInfo(this.uid);
+    await this.fetchJobInfo(this.uid, "");
   }
 
-  private async fetchJobInfo(jobuid: number) {
+  async fetchWithKey(key: string) {
+    await this.fetchJobInfo(this.uid, key);
+  }
+
+  private async fetchJobInfo(jobuid: number, apiKey: string) {
     this.description = "Loading...";
     this.certificate = false;
 
@@ -43,6 +47,7 @@ export default class Job {
       headers: {
         Accept: "application/json",
         "Access-Control-Allow-Origin": "*",
+        "x-api-key": apiKey,
       },
     })
       .then((response) => response.json())
