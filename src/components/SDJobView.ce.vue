@@ -9,6 +9,8 @@ const props = defineProps<{
   verifiedColor?: string;
   externalCssUrl?: string;
   uid?: number;
+  skillsDetailed?: boolean;
+  skillsExpandable?: boolean;
 }>();
 
 const job = ref<Job>(new Job(props.uid || 0));
@@ -110,8 +112,8 @@ const apiKey = ref("");
   >
     <dialog
       :open="showAuthenticateDialog"
-      @close="showAuthenticateDialog = false"
       class="shadow-lg rounded-md p-4 bg-white mt-4 p-2"
+      @close="showAuthenticateDialog = false"
     >
       <span
         >Authenticate your SkillDisplay account by entering your API-Key
@@ -119,22 +121,22 @@ const apiKey = ref("");
       >
       <label class="text-sm text-gray-700 block mt-2" for="key">API-Key</label>
       <input
-        type="text"
-        class="border border-gray-300 rounded-md p-2 w-full"
         id="key"
         v-model="apiKey"
+        class="border border-gray-300 rounded-md p-2 w-full"
+        type="text"
       />
       <div class="flex gap-4 mt-4">
         <button
-          type="button"
           class="text-blue-500 underline font-bold"
+          type="button"
           @click="showAuthenticateDialog = false"
         >
           Cancel
         </button>
         <button
-          type="button"
           class="text-blue-500 underline font-bold"
+          type="button"
           @click="showAuthenticateDialog = false"
         >
           Authenticate
@@ -146,8 +148,8 @@ const apiKey = ref("");
       <div class="flex justify-between">
         <h1 class="text-2xl font-bold">{{ job.name }}</h1>
         <button
-          type="button"
           class="text-blue-500 underline"
+          type="button"
           @click="showAuthenticateDialog = true"
         >
           Authenticate
@@ -167,7 +169,9 @@ const apiKey = ref("");
           { 'sd-submit-progress-60': progress >= 60 },
           { 'sd-submit-progress-80': progress >= 80 },
           { 'sd-submit-progress-100': progress >= 100 },
+          { 'bg-verified': !verifiedColor },
         ]"
+        :style="[verifiedColor ? { 'background-color': verifiedColor } : {}]"
         class="sd-submit bottom-0"
         type="submit"
       >
@@ -185,6 +189,8 @@ const apiKey = ref("");
       >
         <div v-for="skill in unverifiedSkills" :key="skill.uid">
           <sd-skill
+            :detailed="skillsDetailed"
+            :expandable="skillsExpandable"
             :external-css-url="externalCssUrl"
             :skill="skill"
             :verifiedColor="verifiedColor"
@@ -201,6 +207,8 @@ const apiKey = ref("");
       >
         <div v-for="skill in verifiedSkills" :key="skill.uid">
           <sd-skill
+            :detailed="skillsDetailed"
+            :expandable="skillsExpandable"
             :external-css-url="externalCssUrl"
             :skill="skill"
             :verifiedColor="verifiedColor"
@@ -220,7 +228,7 @@ const apiKey = ref("");
 }
 
 .sd-submit {
-  @apply text-white font-bold p-4 rounded-md bg-green-500;
+  @apply text-white font-bold p-4 rounded-md;
 }
 
 .list-move /* apply transition to moving elements */ {

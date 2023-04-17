@@ -14,6 +14,7 @@ function myFunction() {
         <sd-job-view
           id="testJob"
           class="h-full"
+          skills-expandable
           external-css-url="ext.css"
           uid="654"
           @jobSubmit="myFunction"
