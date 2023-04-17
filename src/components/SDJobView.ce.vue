@@ -101,7 +101,17 @@ function onSkillLeave(el: any, done: any) {
 }
 
 const showAuthenticateDialog = ref(false);
+const loadingAuthenticate = ref(false);
 const apiKey = ref("");
+
+async function authenticateWithKey() {
+  console.log("authenticateWithKey");
+  loadingAuthenticate.value = true;
+  await job.value.fetchWithKey(apiKey.value);
+  skills.value = job.value.skills;
+  loadingAuthenticate.value = false;
+  showAuthenticateDialog.value = false;
+}
 </script>
 <template>
   <link :href="externalCssUrl" rel="stylesheet" />
@@ -137,9 +147,9 @@ const apiKey = ref("");
         <button
           class="text-blue-500 underline font-bold"
           type="button"
-          @click="showAuthenticateDialog = false"
+          @click="authenticateWithKey"
         >
-          Authenticate
+          {{ loadingAuthenticate ? "Loading..." : "Authenticate" }}
         </button>
       </div>
     </dialog>

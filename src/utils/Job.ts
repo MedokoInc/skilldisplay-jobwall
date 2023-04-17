@@ -32,6 +32,7 @@ export default class Job {
   }
 
   async fetchWithKey(key: string) {
+    this.skills = [];
     await this.fetchJobInfo(this.uid, key);
   }
 
