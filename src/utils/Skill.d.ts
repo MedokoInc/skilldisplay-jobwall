@@ -16,6 +16,7 @@ export default class Skill {
     pending: boolean;
     isVerified(): boolean;
     fetch(): Promise<void>;
+    fetchWithKey(key: string): Promise<void>;
     private fetchSkillInfo;
     private couldNotReadSkill;
     setTitle(title: string): void;

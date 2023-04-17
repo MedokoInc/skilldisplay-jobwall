@@ -16,6 +16,9 @@ export default class Job {
     brand: typeof Brand;
     skills: Skill[];
     fetch(): Promise<void>;
+    fetchWithKey(key: string): Promise<void>;
     private fetchJobInfo;
+    private verifyCheckedSkills;
+    private verifySkill;
     private couldNotReadJob;
 }

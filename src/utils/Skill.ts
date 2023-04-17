@@ -28,10 +28,14 @@ export default class Skill {
   }
 
   async fetch() {
-    await this.fetchSkillInfo();
+    await this.fetchSkillInfo("");
   }
 
-  private async fetchSkillInfo() {
+  async fetchWithKey(key: string) {
+    await this.fetchSkillInfo(key);
+  }
+
+  private async fetchSkillInfo(apiKey: string) {
     this.description = "Loading...";
     this.goals = "Loading...";
 
@@ -40,6 +44,7 @@ export default class Skill {
       credentials: "same-origin",
       headers: {
         "Content-Type": "application/json",
+        "x-api-key": apiKey,
       },
     })
       .then((response) => response.json())

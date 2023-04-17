@@ -1,5 +1,6 @@
 import Skill from "./Skill";
 import Brand from "./Brand";
+import CryptoJS from "crypto-js";
 export default class Job {
     constructor(jobuid) {
         this.uid = jobuid;
@@ -23,9 +24,12 @@ export default class Job {
     brand = Brand;
     skills = [];
     async fetch() {
-        await this.fetchJobInfo(this.uid);
+        await this.fetchJobInfo(this.uid, "");
     }
-    async fetchJobInfo(jobuid) {
+    async fetchWithKey(key) {
+        await this.fetchJobInfo(this.uid, key);
+    }
+    async fetchJobInfo(jobuid, apiKey) {
         this.description = "Loading...";
         this.certificate = false;
         const url = "https://www.skilldisplay.eu/api/v1/skillset/" + jobuid;
@@ -36,6 +40,7 @@ export default class Job {
             headers: {
                 Accept: "application/json",
                 "Access-Control-Allow-Origin": "*",
+                "x-api-key": apiKey,
             },
         })
             .then((response) => response.json())
@@ -65,6 +70,45 @@ export default class Job {
             .catch(() => {
             this.couldNotReadJob();
         });
+    }
+    verifyCheckedSkills(email, apiKey) {
+        for (const skill of this.skills) {
+            if (skill.progress.self == 0) {
+                this.verifySkill(skill, email, apiKey);
+            }
+        }
+    }
+    verifySkill(skill, email, apiKey) {
+        skill.pending = true;
+        if (email != "") {
+            const payload = {
+                SkillId: skill.uid,
+                Level: "self",
+                VerifierId: 0,
+                CampaignId: 0,
+                Username: email,
+                AutoConfirm: true,
+                Signature: "",
+            };
+            payload.Signature = CryptoJS.SHA256(JSON.stringify(payload) + "sdself").toString();
+            fetch("https://www.skilldisplay.eu/api/v1/verification/confirm", {
+                method: "POST",
+                credentials: "same-origin",
+                headers: {
+                    "Content-Type": "application/json",
+                    "x-api-key": apiKey,
+                },
+                body: JSON.stringify(payload),
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                if (data.success) {
+                    skill.pending = false;
+                    skill.progress.self = 0;
+                    skill.fetch();
+                }
+            });
+        }
     }
     couldNotReadJob() { }
 }
