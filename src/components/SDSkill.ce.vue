@@ -61,7 +61,7 @@ const expanded = ref(false);
         >
           <IconChevron
             class="w-full h-full transform transition-[transform] duration-300"
-            :class="{ 'rotate-180': expanded }"
+            :class="{ 'rotate-180': !expanded }"
           />
         </button>
         <span class="text-lg font-bold test sd-skill-title">{{
@@ -78,13 +78,13 @@ const expanded = ref(false);
       </div>
     </div>
     <div
-      class="overflow-y-auto"
+      class="overflow-y-auto sd-skill-details"
       :class="[
-        expanded ? 'max-h-[22rem]' : 'max-h-0',
+        isExpanded ? 'max-h-[22rem]' : 'max-h-0',
         'transition-all duration-500',
       ]"
     >
-      <hr class="my-2" />
+      <hr class="my-2 sd-skill-separator" />
       <div
         class="p-4 py-2 text-sm text-gray-500 sd-skill-description"
         v-html="skillRef.description"
