@@ -38,6 +38,7 @@ onMounted(async () => {
 });
 
 const emit = defineEmits(["toggleVerify"]);
+
 function toggleVerify() {
   if (!props.skill) {
     skillRef.value.validated = !skillRef.value.validated;
@@ -49,21 +50,21 @@ const expanded = ref(false);
 </script>
 <template>
   <div
-    class="sd-skill transition-all duration-500 bg-white font-sans"
     :class="{ 'sd-skill-verified': skillRef.isVerified() }"
+    class="sd-skill transition-all duration-500 bg-white font-sans"
   >
-    <link rel="stylesheet" :href="externalCssUrl" />
+    <link :href="externalCssUrl" rel="stylesheet" />
     <div class="flex items-center gap-4 justify-between mx-2">
       <div class="truncate flex gap-2 items-center">
         <button
-          type="button"
           v-if="expandable"
           class="flex items-center justify-center w-8 h-8 p-2 rounded-full hover:bg-gray-200 focus:outline-none transition-all duration-500"
+          type="button"
           @click="expanded = !expanded"
         >
           <IconChevron
-            class="w-full h-full transform transition-[transform] duration-300"
             :class="{ 'rotate-180': !expanded }"
+            class="w-full h-full transform transition-[transform] duration-300"
           />
         </button>
         <span class="text-lg font-bold test sd-skill-title">{{
@@ -72,28 +73,23 @@ const expanded = ref(false);
       </div>
       <div>
         <SkillCheckCircle
+          :class="{ 'animation-check': skillRef.isVerified() }"
           :verified="skillRef.isVerified()"
           :verifiedColor="verifiedColor"
           @clicked="toggleVerify"
-          :class="{ 'animation-check': skillRef.isVerified() }"
         />
       </div>
     </div>
     <div
-      class="overflow-y-auto sd-skill-details"
       :class="[
         isExpanded ? 'max-h-[22rem]' : 'max-h-0',
         'transition-all duration-500',
       ]"
+      class="overflow-y-auto sd-skill-details"
     >
       <hr class="my-2 sd-skill-separator" />
-      <div
-        class="p-4 py-2 text-sm text-gray-500 sd-skill-description"
-        v-html="skillRef.description"
-      />
-      <hr class="my-2" />
       <div class="p-4 py-2 text-sm text-gray-500 sd-skill-details">
-        <div v-html="skillRef.description" class="sd-skill-description" />
+        <div class="sd-skill-description" v-html="skillRef.description" />
         <h2>Tags</h2>
         <div class="flex w-full gap-2 my-2 sd-skill-tags">
           <div v-if="!skillRef.tags">Loading...</div>
@@ -110,8 +106,8 @@ const expanded = ref(false);
         </div>
         <a
           :href="`https://my.skilldisplay.eu/en/skill/${skillRef.uid}/0`"
-          target="_blank"
           class="text-blue-500 underline mt-2"
+          target="_blank"
           >Open in SkillDisplay</a
         >
       </div>

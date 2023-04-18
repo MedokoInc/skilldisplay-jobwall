@@ -192,7 +192,7 @@ async function authenticateWithKey() {
           { 'sd-submit-progress-80': progress >= 80 },
           { 'sd-submit-progress-100': progress >= 100 },
           {
-            'bg-verified hover:bg-verified/90 active:bg-verified/80':
+            'bg-verified/100 hover:bg-verified/90 active:bg-verified/80':
               !verifiedColor,
           },
         ]"
@@ -253,10 +253,6 @@ async function authenticateWithKey() {
 
 .sd-submit {
   @apply text-white font-bold p-4 rounded-md;
-}
-
-.sd-submit {
-  background-color: v-bind("verifiedColor");
 }
 
 .sd-submit:hover {
