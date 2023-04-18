@@ -97,6 +97,7 @@ export default class Job {
                 credentials: "same-origin",
                 headers: {
                     "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
                     "x-api-key": apiKey,
                 },
                 body: JSON.stringify(payload),

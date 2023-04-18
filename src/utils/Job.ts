@@ -79,7 +79,7 @@ export default class Job {
       });
   }
 
-  private verifyCheckedSkills(email: string, apiKey: string) {
+  public verifyCheckedSkills(email: string, apiKey: string) {
     for (const skill of this.skills) {
       if (skill.progress.self == 0) {
         this.verifySkill(skill, email, apiKey);
@@ -109,6 +109,8 @@ export default class Job {
         credentials: "same-origin",
         headers: {
           "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+
           "x-api-key": apiKey,
         },
         body: JSON.stringify(payload),

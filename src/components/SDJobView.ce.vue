@@ -43,11 +43,6 @@ function toggleVerify(customEvent: any) {
 
 const emit = defineEmits(["jobSubmit"]);
 
-async function submit() {
-  console.log("submit");
-  emit("jobSubmit", skills.value);
-}
-
 const orderedSkills = computed(() => {
   const skillCopy = [...skills.value];
   return skillCopy.sort((a, b) => {
@@ -103,6 +98,16 @@ function onSkillLeave(el: any, done: any) {
 const showAuthenticateDialog = ref(false);
 const loadingAuthenticate = ref(false);
 const apiKey = ref("");
+const email = ref("");
+
+const canVerify = computed(() => {
+  return apiKey.value.length > 0 && email.value.length > 0;
+});
+
+async function submit() {
+  await job.value.verifyCheckedSkills(email.value, apiKey.value);
+  emit("jobSubmit", skills.value);
+}
 
 async function authenticateWithKey() {
   console.log("authenticateWithKey");
@@ -133,6 +138,13 @@ async function authenticateWithKey() {
       <input
         id="key"
         v-model="apiKey"
+        class="border border-gray-300 rounded-md p-2 w-full"
+        type="text"
+      />
+      <label class="text-sm text-gray-700 block mt-2" for="email">Email</label>
+      <input
+        id="email"
+        v-model="email"
         class="border border-gray-300 rounded-md p-2 w-full"
         type="text"
       />

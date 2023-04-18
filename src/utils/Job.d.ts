@@ -18,7 +18,7 @@ export default class Job {
     fetch(): Promise<void>;
     fetchWithKey(key: string): Promise<void>;
     private fetchJobInfo;
-    private verifyCheckedSkills;
+    verifyCheckedSkills(email: string, apiKey: string): void;
     private verifySkill;
     private couldNotReadJob;
 }
