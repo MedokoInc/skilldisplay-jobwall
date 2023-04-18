@@ -21,8 +21,9 @@ export default class Skill {
         certification: 2,
     };
     pending = false;
+    validated = false;
     isVerified() {
-        return this.progress.self === 0;
+        return this.validated;
     }
     async fetch() {
         await this.fetchSkillInfo("");
@@ -78,6 +79,7 @@ export default class Skill {
             business: 2,
             certification: 2,
         };
+        this.validated = false;
     }
     setTitle(title) {
         this.title = title;

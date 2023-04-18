@@ -14,6 +14,7 @@ export default class Skill {
         certification: number;
     };
     pending: boolean;
+    validated: boolean;
     isVerified(): boolean;
     fetch(): Promise<void>;
     fetchWithKey(key: string): Promise<void>;

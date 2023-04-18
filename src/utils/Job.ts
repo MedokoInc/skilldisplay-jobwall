@@ -70,6 +70,7 @@ export default class Job {
             const skillObject = new Skill(skill.uid);
             skillObject.progress = skill.progress;
             skillObject.title = skill.title;
+            if (skill.progress.self == 0) skillObject.validated = true;
             this.skills.push(skillObject);
           }
         } else this.couldNotReadJob();
@@ -81,7 +82,7 @@ export default class Job {
 
   public verifyCheckedSkills(email: string, apiKey: string) {
     for (const skill of this.skills) {
-      if (skill.progress.self == 0) {
+      if (skill.progress.self == 2 && skill.validated) {
         this.verifySkill(skill, email, apiKey);
       }
     }
@@ -90,10 +91,30 @@ export default class Job {
   private verifySkill(skill: Skill, email: string, apiKey: string) {
     skill.pending = true;
     if (email != "") {
+      fetch("https://www.skilldisplay.eu/api/v1/verification/request", {
+        method: "POST",
+        credentials: "same-origin",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+          "Access-Control-Allow-Origin": "*",
+        },
+        body: new URLSearchParams({
+          "tx_skills_api[tier]": "3",
+          "tx_skills_api[skill]": skill.uid.toString(),
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            skill.pending = false;
+            skill.progress.self = 0;
+          }
+        });
+
       const payload = {
+        SkillSetId: 0,
         SkillId: skill.uid,
         Level: "self",
-        VerifierId: 0,
         CampaignId: 0,
         Username: email,
         AutoConfirm: true,
@@ -110,7 +131,6 @@ export default class Job {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
-
           "x-api-key": apiKey,
         },
         body: JSON.stringify(payload),

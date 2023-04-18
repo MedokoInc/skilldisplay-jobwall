@@ -38,7 +38,7 @@ function toggleVerify(customEvent: any) {
   if (!skill) return;
 
   console.log(skill);
-  skill.progress.self = skill.progress.self === 0 ? 2 : 0;
+  skill.validated = !skill.validated;
 }
 
 const emit = defineEmits(["jobSubmit"]);

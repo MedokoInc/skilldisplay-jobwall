@@ -22,9 +22,10 @@ export default class Skill {
     certification: 2,
   };
   pending: boolean = false;
+  validated: boolean = false;
 
   isVerified() {
-    return this.progress.self === 0;
+    return this.validated;
   }
 
   async fetch() {
@@ -57,6 +58,9 @@ export default class Skill {
           this.tags = data.tags;
           this.links = data.links;
           this.progress = data.progress;
+          if (this.progress.self === 0) {
+            this.validated = true;
+          }
         } else this.couldNotReadSkill();
       })
       .catch(() => {
@@ -83,6 +87,7 @@ export default class Skill {
       business: 2,
       certification: 2,
     };
+    this.validated = false;
   }
 
   setTitle(title: string) {
