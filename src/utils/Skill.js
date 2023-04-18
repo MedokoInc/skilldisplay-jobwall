@@ -52,6 +52,9 @@ export default class Skill {
                 this.tags = data.tags;
                 this.links = data.links;
                 this.progress = data.progress;
+                if (this.progress.self === 0) {
+                    this.validated = true;
+                }
             }
             else
                 this.couldNotReadSkill();

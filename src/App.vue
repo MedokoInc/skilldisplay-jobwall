@@ -15,6 +15,7 @@ function myFunction() {
           id="testJob"
           class="h-full"
           skills-expandable
+          verified-color="#ff0000"
           external-css-url="ext.css"
           uid="654"
           @jobSubmit="myFunction"

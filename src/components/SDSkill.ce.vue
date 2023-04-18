@@ -28,7 +28,9 @@ onMounted(async () => {
     isExpanded,
     (value) => {
       if (value) {
-        skillRef.value.fetch();
+        if (skillRef.value.description === "Loading...") {
+          skillRef.value.fetch();
+        }
       }
     },
     { immediate: true }
@@ -85,10 +87,29 @@ const expanded = ref(false);
       ]"
     >
       <hr class="my-2" />
-      <div
-        class="p-4 py-2 text-sm text-gray-500 sd-skill-description"
-        v-html="skillRef.description"
-      />
+      <div class="p-4 py-2 text-sm text-gray-500 sd-skill-details">
+        <div v-html="skillRef.description" class="sd-skill-description" />
+        <h2>Tags</h2>
+        <div class="flex w-full gap-2 my-2 sd-skill-tags">
+          <div v-if="!skillRef.tags">Loading...</div>
+          <div v-else-if="!skillRef.tags.length">No tags</div>
+          <div v-for="tag in skillRef.tags" :key="tag" class="tag">
+            <div
+              class="sd-skill-tag border-gray-400 border rounded-full flex items-center min-w-[2rem] max-w-[8rem] text-xs font-bold text-raisin/70 justify-center"
+            >
+              <div class="mx-2 truncate">
+                {{ tag.title }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <a
+          :href="`https://my.skilldisplay.eu/en/skill/${skillRef.uid}/0`"
+          target="_blank"
+          class="text-blue-500 underline mt-2"
+          >Open in SkillDisplay</a
+        >
+      </div>
     </div>
   </div>
 </template>

@@ -17,7 +17,7 @@ const emit = defineEmits<{
     :style="[
       verified && verifiedColor ? { 'background-color': verifiedColor } : {},
     ]"
-    class="rounded-full w-10 aspect-square text-white p-1 transition-colors duration-300"
+    class="rounded-full w-10 aspect-square text-white p-1 transition-colors duration-300 cursor-pointer"
     @click="emit('clicked')"
   >
     <svg

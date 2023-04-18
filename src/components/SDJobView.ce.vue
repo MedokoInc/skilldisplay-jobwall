@@ -191,9 +191,11 @@ async function authenticateWithKey() {
           { 'sd-submit-progress-60': progress >= 60 },
           { 'sd-submit-progress-80': progress >= 80 },
           { 'sd-submit-progress-100': progress >= 100 },
-          { 'bg-verified': !verifiedColor },
+          {
+            'bg-verified hover:bg-verified/90 active:bg-verified/80':
+              !verifiedColor,
+          },
         ]"
-        :style="[verifiedColor ? { 'background-color': verifiedColor } : {}]"
         class="sd-submit bottom-0"
         type="submit"
       >
@@ -251,6 +253,18 @@ async function authenticateWithKey() {
 
 .sd-submit {
   @apply text-white font-bold p-4 rounded-md;
+}
+
+.sd-submit {
+  background-color: v-bind("verifiedColor");
+}
+
+.sd-submit:hover {
+  background-color: v-bind("`${verifiedColor}E6`");
+}
+
+.sd-submit:active {
+  background-color: v-bind("`${verifiedColor}CC`");
 }
 
 .list-move /* apply transition to moving elements */ {
