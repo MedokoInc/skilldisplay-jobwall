@@ -19,6 +19,16 @@ const skills = ref<Skill[]>([]);
 onMounted(async () => {
   await job.value.fetch();
   skills.value = job.value.skills;
+
+  // load apiKey and email from local storage
+  apiKey.value = localStorage.getItem("apiKey") || "";
+  email.value = localStorage.getItem("email") || "";
+
+  // if apiKey and email are set, fetch skills
+  if (apiKey.value) {
+    await job.value.fetchWithKey(apiKey.value);
+    skills.value = job.value.skills;
+  }
 });
 
 const totalSkills = computed(() => skills.value.length);
@@ -114,7 +124,23 @@ async function authenticateWithKey() {
   loadingAuthenticate.value = true;
   await job.value.fetchWithKey(apiKey.value);
   skills.value = job.value.skills;
+
+  // write the key and email to local storage
+  localStorage.setItem("apiKey", apiKey.value);
+  localStorage.setItem("email", email.value);
+
   loadingAuthenticate.value = false;
+  showAuthenticateDialog.value = false;
+}
+
+async function clearAuthentication() {
+  apiKey.value = "";
+  email.value = "";
+  localStorage.removeItem("apiKey");
+  localStorage.removeItem("email");
+  job.value = new Job(props.uid || 0);
+  await job.value.fetch();
+  skills.value = job.value.skills;
   showAuthenticateDialog.value = false;
 }
 </script>
@@ -163,6 +189,13 @@ async function authenticateWithKey() {
         >
           {{ loadingAuthenticate ? "Loading..." : "Authenticate" }}
         </button>
+        <button
+          class="text-red-500 underline font-bold ml-auto"
+          type="button"
+          @click="clearAuthentication"
+        >
+          Clear
+        </button>
       </div>
     </dialog>
 
@@ -187,6 +220,7 @@ async function authenticateWithKey() {
       <progress-bar :external-css-url="externalCssUrl" :progress="progress" />
       <button
         :class="[
+          { 'sd-submit-progress-20': progress >= 20 },
           { 'sd-submit-progress-40': progress >= 40 },
           { 'sd-submit-progress-60': progress >= 60 },
           { 'sd-submit-progress-80': progress >= 80 },
@@ -196,7 +230,7 @@ async function authenticateWithKey() {
               !verifiedColor,
           },
         ]"
-        class="sd-submit bottom-0"
+        class="sd-submit bottom-0 sd-submit-progress"
         type="submit"
       >
         Submit
